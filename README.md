@@ -20,6 +20,7 @@ Evaluate response quality using RAGAS-style metrics
 All components run without external APIs, which was an intentional design decision due to the constraints of my working environment.
 
 ✨ Summary of What the System Can Do
+
 🔹 Local Embedding Pipeline
 
 I implemented a complete embedding pipeline using all-MiniLM-L6-v2.
