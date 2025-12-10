@@ -1,3 +1,5 @@
+<img width="1916" height="1061" alt="image" src="https://github.com/user-attachments/assets/efcb5c7a-6915-4123-a896-225eb137d1db" />
+
 NASA RAG System — Project Write-Up
 
 Author: Saad Iqbal
