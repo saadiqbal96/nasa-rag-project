@@ -1,7 +1,9 @@
 # NASA RAG Chat Project — ChromaDB + OpenAI + RAGAS
 
 Author: Saad Iqbal
+
 Repo: nasa-rag-project
+
 Project Type: Retrieval-Augmented Generation (RAG) system with evaluation + Streamlit UI
 
 1) Project Overview
