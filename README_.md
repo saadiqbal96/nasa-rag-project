@@ -1,4 +1,4 @@
-NASA RAG Chat Project — ChromaDB + OpenAI + RAGAS
+# NASA RAG Chat Project — ChromaDB + OpenAI + RAGAS
 
 Author: Saad Iqbal
 Repo: nasa-rag-project
