@@ -2,7 +2,9 @@
 Retrieval-Augmented Generation with ChromaDB, OpenAI & RAGAS
 
 Author: Saad Iqbal
+
 Repository: nasa-rag-project
+
 Project Type: End-to-End RAG System with Evaluation and Streamlit UI
 
 🌌 Project Overview
