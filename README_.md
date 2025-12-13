@@ -18,16 +18,25 @@ All design decisions are explicitly aligned with the Udacity project rubric and 
 ✅ Rubric-Aligned Features (At a Glance)
 
 ✔ ChromaDB persistent vector store
+
 ✔ OpenAI embedding model (text-embedding-3-small)
+
 ✔ Configurable chunk size & overlap (CLI flags)
+
 ✔ Document update modes: skip / update / replace
+
 ✔ Metadata-aware retrieval (mission, source, category)
+
 ✔ System-prompt-based LLM grounding
+
 ✔ Conversation history management
+
 ✔ Batch evaluation with RAGAS-style metrics
+
 ✔ Streamlit chat interface
 
 🧠 Core Architecture
+
 Text Files
    ↓
 Configurable Chunking
@@ -44,20 +53,33 @@ Batch Evaluation (RAGAS-style)
 
 📁 Repository Structure
 .
+
 ├── chat_.py                   # Streamlit chat UI
+
 ├── embedding_pipeline_.py     # ChromaDB + OpenAI embedding pipeline
+
 ├── RAG_CLIENT_.py             # Retrieval + context construction
+
 ├── LLM_CLIENT_.py             # System-prompted LLM client
+
 ├── ragas_evaluator_.py        # Evaluation metrics (relevancy, faithfulness)
+
 ├── ragas_batch_eval.py        # Batch evaluation runner
+
 ├── evaluation_dataset.jsonl   # Evaluation test set (≥5 questions)
+
 ├── ragas_report.json          # Generated evaluation report
+
 ├── chroma.sqlite3             # Persistent ChromaDB store
+
 ├── AS13_TEC_.txt              # NASA Apollo 13 technical transcript
+
 ├── README.md
+
 └── gitignore.txt
 
 🧩 Key Implementation Details
+
 🔹 1. Configurable Chunking (Rubric Critical)
 
 Chunk size and overlap are runtime-configurable
@@ -160,13 +182,21 @@ Try asking:
 
 🖥️ Running the Project
 1️⃣ Build / Update the Vector Store
+
 python embedding_pipeline_.py \
+
   --data-path . \
+
   --openai-key $OPENAI_API_KEY \
+  
   --chroma-dir ./chroma_db_openai \
+  
   --collection-name nasa_space_missions_text \
+  
   --chunk-size 500 \
+  
   --chunk-overlap 100 \
+  
   --update-mode skip
 
 2️⃣ Launch the Chat UI
