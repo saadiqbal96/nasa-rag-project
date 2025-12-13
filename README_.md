@@ -1,166 +1,165 @@
-# NASA RAG Chat Project — ChromaDB + OpenAI + RAGAS
+🚀 NASA RAG Chat Project
+Retrieval-Augmented Generation with ChromaDB, OpenAI & RAGAS
 
-**Author: Saad Iqbal**
+Author: Saad Iqbal
+Repository: nasa-rag-project
+Project Type: End-to-End RAG System with Evaluation and Streamlit UI
 
-Repo: nasa-rag-project
+🌌 Project Overview
 
-Project Type: Retrieval-Augmented Generation (RAG) system with evaluation + Streamlit UI
+This project implements a fully-functional Retrieval-Augmented Generation (RAG) system for NASA mission documents (Apollo 11, Apollo 13, Challenger).
 
-1) Project Overview
+The system follows the complete RAG lifecycle:
 
-This project implements an end-to-end RAG (Retrieval-Augmented Generation) pipeline for NASA mission documents (e.g., Apollo 11 / Apollo 13 / Challenger). It includes:
+Document ingestion → chunking → OpenAI embeddings → ChromaDB storage → retrieval → grounded LLM responses → batch evaluation
 
-Document ingestion + chunking (configurable chunk size + overlap)
+All design decisions are explicitly aligned with the Udacity project rubric and prior reviewer feedback.
 
-OpenAI embeddings stored in a persistent ChromaDB collection
+✅ Rubric-Aligned Features (At a Glance)
 
-A RAG retriever with optional metadata filtering (e.g., mission)
+✔ ChromaDB persistent vector store
+✔ OpenAI embedding model (text-embedding-3-small)
+✔ Configurable chunk size & overlap (CLI flags)
+✔ Document update modes: skip / update / replace
+✔ Metadata-aware retrieval (mission, source, category)
+✔ System-prompt-based LLM grounding
+✔ Conversation history management
+✔ Batch evaluation with RAGAS-style metrics
+✔ Streamlit chat interface
 
-An LLM client with system prompt + conversation history and grounded answering rules
+🧠 Core Architecture
+Text Files
+   ↓
+Configurable Chunking
+   ↓
+OpenAI Embeddings
+   ↓
+ChromaDB (Persistent Collection)
+   ↓
+Metadata-Filtered Retrieval
+   ↓
+Grounded LLM Responses
+   ↓
+Batch Evaluation (RAGAS-style)
 
-Evaluation via a small test set and a batch evaluator producing a JSON report (RAGAS-style metrics)
+📁 Repository Structure
+.
+├── chat_.py                   # Streamlit chat UI
+├── embedding_pipeline_.py     # ChromaDB + OpenAI embedding pipeline
+├── RAG_CLIENT_.py             # Retrieval + context construction
+├── LLM_CLIENT_.py             # System-prompted LLM client
+├── ragas_evaluator_.py        # Evaluation metrics (relevancy, faithfulness)
+├── ragas_batch_eval.py        # Batch evaluation runner
+├── evaluation_dataset.jsonl   # Evaluation test set (≥5 questions)
+├── ragas_report.json          # Generated evaluation report
+├── chroma.sqlite3             # Persistent ChromaDB store
+├── AS13_TEC_.txt              # NASA Apollo 13 technical transcript
+├── README.md
+└── gitignore.txt
 
-This repo is designed to match rubric requirements that explicitly mention ChromaDB, OpenAI embeddings, configurable chunking, update modes, and evaluation outputs.
+🧩 Key Implementation Details
+🔹 1. Configurable Chunking (Rubric Critical)
 
-2) Key Features Aligned to Rubric
-2.1 Chunking & Configuration
+Chunk size and overlap are runtime-configurable
 
-Chunking uses runtime configuration (CLI flags), not hard-coded constants:
+No hard-coded constants
 
---chunk-size
+--chunk-size 500
+--chunk-overlap 100
 
---chunk-overlap
 
-Validation ensures overlap stays smaller than chunk size.
+Validation ensures overlap is always smaller than chunk size.
 
-2.2 Embeddings & Storage
+🔹 2. OpenAI Embeddings + ChromaDB
 
-Embeddings are created using OpenAI embedding models (default: text-embedding-3-small)
+Uses OpenAI embeddings (text-embedding-3-small)
 
-Stored in a persistent ChromaDB collection (chroma.sqlite3 is created and saved)
+Stored in a persistent ChromaDB collection
 
-2.3 Update Modes
+Supports:
+
+--chroma-dir
+
+--collection-name
+
+--stats-only mode
+
+🔹 3. Update Modes for Existing Documents
 
 Embedding pipeline supports:
 
---update-mode skip (default)
+skip → ignore existing documents
 
---update-mode update
+update → update existing chunks
 
---update-mode replace
+replace → delete and re-ingest
 
-2.4 Retrieval + Clean Context Construction
+--update-mode skip|update|replace
 
-Retriever produces:
+🔹 4. Retrieval & Context Construction
 
-score-sorted results
+Retriever provides:
 
-optional mission filtering
+Top-K configurable retrieval
 
-formatted context including source / mission / category / score
+Optional mission filtering
 
-deduplication using stable identifiers (document_id / source+chunk)
+Score-sorted results
 
-2.5 LLM Grounding
+Deduplication
 
-LLM client includes:
+Clean, single context block
 
-A system prompt positioning the assistant as a NASA mission expert
+Example context header:
 
-Conversation history support (trimmed)
+[Apollo 13 • AS13_TEC • Technical • Score: 0.412]
 
-Rules for grounding:
+🔹 5. LLM Grounding & System Prompt
 
-use retrieved context only
+The LLM client uses a strict system prompt:
 
-cite sources
+Positions the model as a NASA mission expert
 
-say when the answer is not in the context
+Forces answers to rely only on retrieved context
 
-2.6 Evaluation + Batch Report
+Requires explicit source citations
+
+States uncertainty when context is insufficient
+
+Conversation history is maintained and trimmed for multi-turn chat.
+
+🔹 6. Evaluation & Batch Metrics
 
 Includes:
 
-evaluation_dataset.jsonl (≥5 NASA mission questions)
+evaluation_dataset.jsonl (≥5 Apollo-13 questions)
 
-batch evaluation script that:
+Batch evaluation script
 
-runs retrieval + response
+Metrics include:
 
-evaluates metrics
+Relevancy
 
-writes ragas_report.json
+Faithfulness
 
-3) Project Structure
+Outputs:
 
-Note: filenames in this repo include trailing underscores to match the uploaded/working versions.
+ragas_report.json
 
-.
-├── README.md
-├── chat_.py
-├── embedding_pipeline_.py
-├── RAG_CLIENT_.py
-├── LLM_CLIENT_.py
-├── ragas_evaluator_.py
-├── ragas_batch_eval.py
-├── evaluation_dataset.jsonl
-├── ragas_report.json
-├── chroma.sqlite3
-├── AS13_TEC_.txt
-├── EVALUATION_RUBRIC_.md
-└── gitignore.txt
+💬 Example Questions
 
-4) Screenshots
+Try asking:
 
-Add your screenshots to a folder (recommended):
+“What caused the Apollo 13 oxygen tank explosion?”
 
-/assets
-  ├── streamlit_demo.png
-  └── colab_evaluation.png
+“At what altitude were the Apollo 13 parachutes first visible?”
 
+“What did the crew report immediately after the explosion?”
 
-Then embed them in this README like:
+“What communication difficulties occurred during re-entry?”
 
-## Screenshots
-
-### Streamlit Chat Demo
-![Streamlit Demo](assets/streamlit_demo.png)
-
-### Batch Evaluation Output (Colab)
-![Evaluation Output](assets/colab_evaluation.png)
-
-5) Setup Instructions
-5.1 Prerequisites
-
-Python 3.9+ recommended
-
-A valid OpenAI API key with available billing/credits
-
-5.2 Install Dependencies
-
-If you are running locally:
-
-pip install chromadb openai streamlit pandas numpy
-
-
-(If you already have a requirements.txt, use that instead.)
-
-5.3 Set Your API Key
-
-Mac/Linux:
-
-export OPENAI_API_KEY="your_key_here"
-
-
-Windows (PowerShell):
-
-setx OPENAI_API_KEY "your_key_here"
-
-6) Running the Project
-Step 1 — Build / Update the ChromaDB Collection
-
-Run the embedding pipeline:
-
+🖥️ Running the Project
+1️⃣ Build / Update the Vector Store
 python embedding_pipeline_.py \
   --data-path . \
   --openai-key $OPENAI_API_KEY \
@@ -170,63 +169,31 @@ python embedding_pipeline_.py \
   --chunk-overlap 100 \
   --update-mode skip
 
-Optional: Show collection stats only
-python embedding_pipeline_.py \
-  --openai-key $OPENAI_API_KEY \
-  --chroma-dir ./chroma_db_openai \
-  --collection-name nasa_space_missions_text \
-  --stats-only
-
-Step 2 — Launch the Streamlit Chat App
+2️⃣ Launch the Chat UI
 streamlit run chat_.py
 
-
-Then open the local Streamlit URL shown in the terminal.
-
-Step 3 — Run Batch Evaluation
-
-Make sure your dataset file exists (evaluation_dataset.jsonl) and run:
-
+3️⃣ Run Batch Evaluation
 python ragas_batch_eval.py
 
+🧪 Why This Meets the Rubric
 
-Outputs:
+This submission directly addresses prior reviewer feedback by:
 
-ragas_report.json (per-question scores + report file)
+Using ChromaDB instead of FAISS
 
-7) Example Questions
+Using OpenAI embeddings instead of local MiniLM
 
-Try queries like:
+Making chunking configurable at runtime
 
-“What caused the Apollo 13 oxygen tank explosion?”
+Adding update modes
 
-“At what altitude were the Apollo 13 parachutes first visible?”
+Adding a system prompt + conversation memory
 
-“What did the crew report immediately after the explosion?”
+Producing batch evaluation output
 
-“What communication issues occurred during re-entry?”
+Aligning README claims with actual code behavior
 
-8) Notes for Reviewer
-
-This submission intentionally follows rubric requirements by including:
-
-ChromaDB persistence (chroma.sqlite3)
-
-OpenAI embeddings (text-embedding-3-small default)
-
-Configurable chunking via CLI args
-
-Update modes (skip/update/replace)
-
-System prompt and conversation history logic in the LLM client
-
-Evaluation dataset + batch evaluation script that outputs a results file
-
-9) License
-
-For educational use in Udacity coursework.
-
-10) Author
+👤 Author
 
 Saad Iqbal
-Repo: nasa-rag-project
+nasa-rag-project
